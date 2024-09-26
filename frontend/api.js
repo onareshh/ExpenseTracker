@@ -1,2 +1,2 @@
 
-const BASE_URL = 'https://cool-cat-7d841f.netlify.app';
+const BASE_URL = 'https://expensetracker-be-sjob.onrender.com';
