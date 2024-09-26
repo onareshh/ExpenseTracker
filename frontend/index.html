@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css"> 
+    <!-- Link to your CSS file -->
+     <script src="api.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Login</h1>
+        <form id="login-form">
+            <div class="formLine">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Username" required />
+            </div>
+            <div class="formLine">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Password" required />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="signup.html">Create one here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Check if username and password are not empty
+    if (!username || !password) {
+        alert('Please enter both username and password');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        // Check if the server responded with a non-2xx status code
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg || 'Login failed');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        window.location.href = 'main.html';  // Redirect to landing page
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+});
+
+    </script>
+</body>
+</html>
